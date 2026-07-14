@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HamodaGuko</title>
+    <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
+<style>
+        body{
+            margin:0;
+            padding:0;
+        }
+        body{
+            background-image: url('day.jpeg');
+            background-position: center center;
+            background-size: cover;
+            background-repeat:no-repeat;
+            min-height: 100vh;
+            min-height: 100dvh;
+            transition:all 1s ;
+            background-attachment: fixed;
+        }
+        .logo{
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/0/0b/Dragon_Ball_Z_logo.svg');
+            background-position:center center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            height:50px;
+            margin:10px 0 0 0 ;
+        }
+        .choices{
+            
+            margin:10px;
+            text-align:center
+        }
+        .fa-sun{
+        
+            margin:0 10px 0 0;
+            transition:all 1s;
+        }
+        .fa-moon{
+            margin:0 10px 0 0;
+        }
+        #search{
+            border-radius: 10%;
+            border-color:cadetblue;
+            width:200px;
+            font-family:cursive;
+            text-align: center;
+            transition:all 1s;
+        }
+        .fa-magnifying-glass{
+            margin:0 5px ;
+        }
+        .dark{
+            background-image: url('night.jpeg');
+            background-position: center center;
+            background-size: cover;
+            background-repeat:no-repeat;
+            min-height: 100vh;
+            min-height: 100dvh;
+            color:white;
+            
+        }
+        .dark-input{
+            background-color:rgb(21, 15, 71);
+        }
+        article{
+            background-color:rgba(87, 68, 68, 0.5);
+            height:200px;
+            color:white;
+            text-align:center;
+            font-family: "Archivo Black", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            flex-basis:100%;
+        }
+        .charimg{
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            width:100%;
+            height:130px;
+        }
+        #characters{
+            display:flex;
+            flex-wrap:wrap;
+            gap:20px;
+            margin:20px;
+            text-align:center;
+        }
+        #game{
+            background-color: rgba(251, 255, 0, 0.719);
+            border:1px solid black;
+            padding:5px ;
+            border-radius:10%;
+            text-align: center;
+            font-family: 'Archivo Black';
+            transition:all 1s;
+            display:inline-block;
+            margin:5px;
+            text-decoration: none; 
+            color:black;
+            
+        }
+        #game:hover{
+            background-color:rgba(0,0,0,0.5);
+            color:white;
+        }
+        p{
+            text-align:center;
+            font-family: 'Archivo Black';
+            color:white;
+            margin:0;
+            padding:20px;
+        }
+        footer{
+            background-color:rgba(0,0,0,0.5);
+            height:100%;
+        }
+        #darkplay{
+            background-color: rgba(17, 17, 9, 0.719);
+            border:1px solid black;
+            padding:5px ;
+            border-radius:10%;
+            text-align: center;
+            font-family: 'Archivo Black';
+            transition:all 1s;
+            display:inline-block;
+            margin:5px;
+            text-decoration: none; 
+            color:white;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav">
+            <a href=""><div class="logo"></div></a>
+            <div class="choices">
+                <input type="text" id="searchinput" placeholder="Character Name">
+                <a id="search"><i class="fa-solid fa-magnifying-glass"></i></a>
+                <a id="change"><i class="fa-solid fa-sun"></i></a>
+                <a id="game" href="play.html" >Play The Game</a>
+
+            </div>
+        </div>
+    </header>
+    <main>
+        <section id="characters">
+            <article>
+                
+            </article>
+        </section>
+    </main>
+    <footer>
+        <hr>
+        <p>Hamoda Elemary 2026 &copy; <a href="https://www.facebook.com/profile.php?id=100089783388424"><i class="fa-brands fa-facebook"></i></a></p>
+    </footer>
+  <script>
+    const change = document.querySelector('#change');
+    change.addEventListener('click',(event)=>{
+        const body = document.querySelector('body')
+        if(body.classList.contains('dark')){
+        body.classList.remove('dark');
+        const moon = document.querySelector('.fa-moon');
+        moon.classList.add('fa-sun');
+        moon.classList.remove('fa-moon')
+        const search = document.querySelector('#searchinput');
+        search.classList.remove('dark-input')
+        const play = document.querySelector('#darkplay');
+        play.id='game'
+    }else{
+        body.classList.add('dark');
+        const sun = document.querySelector('.fa-sun');
+        sun.classList.add('fa-moon')
+        sun.classList.remove('fa-sun')
+        const search = document.querySelector('#searchinput');
+        search.classList.add('dark-input')
+        const play = document.querySelector('#game');
+        play.id='darkplay'
+    }
+    })
+    function fetchingAll(){
+    fetch('https://dragonball-api.com/api/characters?limit=58')
+        .then(response=>response.json())
+        .then(data=>{
+            const chars = document.querySelector('#characters');
+            const objects = data['items'];
+            let content = ``;
+            objects.forEach((node,index)=>{
+                content+=`<article>
+                    <h3 style='display:inline-block; margin:10px;'>${data['items'][index]['name']}</h3><a name=${index} class='info'> <i class="fa-solid fa-info" style='display:inline-block;'></i></a>
+                    <div class='charimg' style="background-image:url('${data['items'][index]['image']}')">
+                    </div>
+                    
+                </article>`
+            })
+            chars.innerHTML=content;
+            
+        })}
+        fetchingAll();
+        function search(name){
+            fetch(`https://dragonball-api.com/api/characters?name=${name}`)
+                .then(response=>response.json())
+                .then(data=>{
+                    console.log(data)
+                    const chars = document.querySelector('#characters');
+                    chars.innerHTML=`
+                    <article>
+                    <h3>${data[0]['name']}</h3>
+                    <div class='charimg' style="background-image:url('${data[0]['image']}')">
+                    </div>
+                    
+                </article>
+                    `
+                })
+        }
+        const searchanc = document.querySelector('#search');
+        searchanc.addEventListener('click',(event)=>{
+            const getname = document.querySelector('#searchinput').value
+            if (getname){
+            search(getname);
+        } else{
+            fetchingAll();
+            }
+
+        })
+        function details(index){
+            fetch('https://dragonball-api.com/api/characters?limit=58')
+                .then(response=>response.json())
+                .then(data=>{
+                    console.log(data['items'][index])
+                    alert(
+                    `
+                    id: ${data['items'][index]['id']}
+                    name: ${data['items'][index]['name']}
+                    ki: ${data['items'][index]['ki']}
+                    max ki: ${data['items'][index]['maxKi']}
+                    race: ${data['items'][index]['race']}
+                    `)
+                })
+        }
+        window.onload=()=>{
+        const getinfo = document.querySelectorAll('.info')
+
+        getinfo.forEach((node)=>{
+        node.addEventListener('click',(event)=>{
+            const index = node.getAttribute('name')
+            details(Number(index));
+        })
+        })}
+        
+
+
+  </script>
+</body>
+</html>

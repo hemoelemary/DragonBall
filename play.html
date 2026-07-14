@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HamodaGuko</title>
+    <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
+<style>
+        body{
+            margin:0;
+            padding:0;
+        }
+        body{
+            background-image: url('day.jpeg');
+            background-position: center center;
+            background-size: cover;
+            background-repeat:no-repeat;
+            min-height: 100vh;
+            min-height: 100dvh;
+            transition:all 1s ;
+            background-attachment: fixed;
+        }
+        .logo{
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/0/0b/Dragon_Ball_Z_logo.svg');
+            background-position:center center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            height:50px;
+            margin:10px 0 0 0 ;
+        }
+        .choices{
+            
+            margin:10px;
+            text-align:center
+        }
+        .fa-sun{
+            color:yellow;
+            margin:0 10px 0 0;
+            transition:all 1s;
+        }
+        .fa-moon{
+            margin:0 10px 0 0;
+        }
+        #search{
+            border-radius: 10%;
+            border-color:cadetblue;
+            width:200px;
+            font-family:cursive;
+            text-align: center;
+            transition:all 1s;
+        }
+        .fa-magnifying-glass{
+            margin:0 5px ;
+        }
+        .dark{
+            background-image: url('night.jpeg');
+            background-position: center center;
+            background-size: cover;
+            background-repeat:no-repeat;
+            min-height: 100vh;
+            min-height: 100dvh;
+            color:white;
+            
+        }
+        .dark-input{
+            background-color:rgb(21, 15, 71);
+        }
+        
+        
+        #game{
+            background-color: rgba(251, 255, 0, 0.719);
+            border:1px solid black;
+            padding:5px ;
+            border-radius:10%;
+            text-align: center;
+            font-family: 'Archivo Black';
+            transition:all 1s;
+        }
+        #game:hover{
+            background-color:rgba(0,0,0,0.5);
+            color:white;
+        }
+        p{
+            text-align:center;
+            font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            color:white;
+            margin:20px;
+            padding:20px;
+            background-color:rgba(0,0,0,0.5);
+        
+        }
+        footer{
+            background-color:rgba(0,0,0,0.5);
+            height:100%;
+        }
+        #score{
+            background-color: rgba(255, 62, 3, 0.5);
+            color:white;
+            padding:5px;
+            border:1px solid black;
+
+        }
+        #darkscore{
+            background-color: rgba(209, 209, 206, 0.5);
+            color:black;
+            padding:5px;
+            border:1px solid black;            
+        }
+        #characters{
+            display:flex;
+            gap: 5px;
+        }
+        article{
+            background-color: rgba(0,0,0,0.5);
+            min-height:100px;
+            flex-basis:50%;
+            color:white;
+            text-align:center;
+            margin:5px;
+        }
+        .img{
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            height:200px;
+            
+        }
+        #next{
+            text-align:center;
+            display:block;
+            margin:5px;
+            border:1px solid black;
+            color:black;
+            transition:all 1s;
+        }
+        #next:hover{
+            color:white;
+            background-color: black;;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav">
+            <a href="dragonball.html"><div class="logo"></div></a>
+            <div class="choices">
+                
+                <span id="score">Score:</span>
+                <a id="change"><i class="fa-solid fa-sun"></i></a>
+                <p>Choose The Strongest :</p>
+            </div>
+
+        </div>
+    </header>
+    <main>
+       <section id="characters">
+        <article>
+            <h3>Goku</h3>
+            <div class="img"></div>
+        </article>
+        <article></article>
+        
+    </section>
+    <a id="next">NextRound</a>
+
+</main>
+    
+  <script>
+    const change = document.querySelector('#change');
+    change.addEventListener('click',(event)=>{
+        const body = document.querySelector('body')
+        if(body.classList.contains('dark')){
+        body.classList.remove('dark');
+        const moon = document.querySelector('.fa-moon');
+        moon.classList.add('fa-sun');
+        moon.classList.remove('fa-moon')
+        const search = document.querySelector('#search');
+        search.classList.remove('dark-input')
+
+    }else{
+        body.classList.add('dark');
+        const sun = document.querySelector('.fa-sun');
+        sun.classList.add('fa-moon')
+        sun.classList.remove('fa-sun')
+        const search = document.querySelector('#search');
+        search.classList.add('dark-input')
+    }
+    })
+
+    let index1;
+    let index2;
+    let content;
+    let opp1;
+    let opp2;
+    let objs = []
+    let rounder;
+    let vs;
+    function start(round){
+    fetch('https://dragonball-api.com/api/characters?limit=58')
+        .then(response=>response.json())
+        .then(data=>{
+            
+            index1=Math.floor(Math.random()*57);
+            index2=Math.floor(Math.random()*57);
+
+            if (index1!=index2){
+                opp1 = data['items'][index1];
+                opp2 = data['items'][index2];
+                objs.push({'opp1':opp1,'opp2':opp2})
+            }else{
+                if(index1==58){
+                    index1-=1;
+                }
+                else if(index1==0){
+                    index1+=1
+                }
+                opp1 = data['items'][index1];
+                opp2 = data['items'][index2];
+                objs.push({'opp1':opp1,'opp2':opp2})
+            }
+        
+        
+        content = ``;
+        const chars = document.querySelector('#characters');
+        vs = objs[round];
+        content = `
+        <article>
+            <h3 ki=${vs['opp1']['ki']}>${vs['opp1']['name']}</h3>
+            <div class="img" style='background-image:url(${vs['opp1']['image']})'></div>
+        </article>
+        <article>
+            <h3 ki=${vs['opp2']['ki']}>${vs['opp2']['name']}</h3>
+            <div class="img" style='background-image:url("${vs['opp2']['image']}")'></div>
+        </article>
+        `
+        chars.innerHTML=content;
+        
+        function addscore(ki1,ki2){
+            if(ki1>ki2){
+                return 'k1'
+            }else if(ki1<ki2){
+                return 'k2'
+            }
+        }
+
+        const kis = []
+        let scoreget = document.querySelector('#score')
+        let score=0
+       
+            
+            const article = document.querySelectorAll('article');
+            article.forEach((node,index)=>{
+            node.addEventListener('click',(event)=>{
+            h3kis = document.querySelectorAll('article h3')
+            h3kis.forEach((node)=>{
+                ki = node.getAttribute('ki') || 0
+                kis.push(Number(ki.replaceAll('.','')));
+                console.log(kis[0]||0,kis[1]||0)
+            
+    
+            })
+            let result=addscore(kis[0]||0,kis[1]||0);
+
+            if(index==0 && result=='k1'){
+                score+=1;
+                rounder+=1;
+                
+            }else if(index==0 && result=='k2'){
+                score-=1;
+                rounder+=1 ;
+                               
+            }else if(index==1 && result=='k1'){
+                score-=1;
+                rounder+=1;
+                
+                
+            }else if(index==1 && result=='k2'){
+                score+=1;
+                rounder+=1;
+                
+
+            
+            }
+            scoreget.innerText=`Score:${score}`
+            
+        })
+            })
+            
+        })}
+        rounder= 0;
+        start(rounder);
+        let nextround = document.querySelector('#next');
+        nextround.addEventListener('click',()=>{
+            
+            start(rounder);
+        })
+
+  </script>
+</body>
+</html>
